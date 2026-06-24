@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Benz — Độ Nhạy Supper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #0b0d10;
+            --s1: #13161c;
+            --s2: #191d25;
+            --s3: #1f242e;
+            --ln: #242a36;
+            --ln2: #2e3545;
+            --tx: #dddce0;
+            --tx2: #8a8d97;
+            --tx3: #4f5260;
+            /* Rainbow colors */
+            --rb-red: #ff3333;
+            --rb-orange: #ff8c1a;
+            --rb-yellow: #ffd700;
+            --rb-green: #00e64d;
+            --rb-blue: #1a8cff;
+            --rb-indigo: #6666ff;
+            --rb-violet: #cc33ff;
+            /* Functional rainbow */
+            --accent: var(--rb-green);
+            --accent2: var(--rb-blue);
+            --accent-bg: rgba(0, 230, 77, .06);
+            --accent-glow: rgba(0, 230, 77, .10);
+            --rose: #ff6b8a;
+            --rose-bg: rgba(255, 107, 138, .06);
+            --err: #ef4444;
+            --err-bg: rgba(239, 68, 68, .06);
+            --ok: #00e64d;
+            --ok-bg: rgba(0, 230, 77, .06);
+            /* Rainbow gradient */
+            --rainbow: linear-gradient(90deg, var(--rb-red), var(--rb-orange), var(--rb-yellow), var(--rb-green), var(--rb-blue), var(--rb-indigo), var(--rb-violet));
+            --rainbow-v: linear-gradient(180deg, var(--rb-red), var(--rb-orange), var(--rb-yellow), var(--rb-green), var(--rb-blue), var(--rb-indigo), var(--rb-violet));
+        }
+
+        html {
+            font-size: 15px
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ── MATRIX BACKGROUND ── */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── SHELL ── */
+        .shell {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel {
+            background: rgba(19, 22, 28, 0.92);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            backdrop-filter: blur(12px);
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 20px;
+            padding: 1px;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowBorder 4s linear infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        @keyframes rainbowBorder {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        /* ── HEADER ── */
+        .hd {
+            padding: 20px 20px 16px;
+            background: linear-gradient(180deg, var(--s2) 0%, var(--s1) 100%);
+            border-bottom: 1px solid var(--ln);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hd-mark {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(255, 51, 51, .08), rgba(204, 51, 255, .08));
+            border: 1px solid rgba(255, 215, 0, .15);
+            display: grid;
+            place-items: center;
+        }
+
+        .hd-mark svg {
+            width: 22px;
+            height: 22px
+        }
+
+        .hd-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .hd-info h1 {
+            font-size: .92rem;
+            font-weight: 800;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowText 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1px;
+            letter-spacing: .3px
+        }
+
+        @keyframes rainbowText {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        .hd-info p {
+            font-size: .6rem;
+            font-weight: 600;
+            color: var(--tx3);
+            letter-spacing: 1.2px;
+            text-transform: uppercase
+        }
+
+        .hd-badge {
+            padding: 4px 9px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            font-size: .52rem;
+            font-weight: 700;
+            letter-spacing: .5px;
+            background: linear-gradient(135deg, rgba(255, 51, 51, .1), rgba(204, 51, 255, .1));
+            border: 1px solid rgba(255, 140, 26, .2);
+            background-clip: padding-box;
+            color: var(--rb-yellow);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 4px rgba(255, 215, 0, .1)
+            }
+
+            50% {
+                box-shadow: 0 0 12px rgba(255, 215, 0, .25)
+            }
+        }
+
+        /* ── CONTENT ── */
+        .ct {
+            padding: 20px
+        }
+
+        /* ── SCREEN LABEL ── */
+        .lbl {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            font-size: .62rem;
+            font-weight: 700;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowText 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .lbl::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowBorder 4s linear infinite;
+            opacity: 0.4;
+        }
+
+        /* ── FORM ── */
+        .fg {
+            margin-bottom: 14px
+        }
+
+        .fg-name {
+            display: block;
+            font-size: .68rem;
+            font-weight: 600;
+            color: var(--tx2);
+            margin-bottom: 5px
+        }
+
+        .fi {
+            width: 100%;
+            padding: 10px 13px;
+            font-family: inherit;
+            background: var(--s2);
+            border: 1px solid var(--ln);
+            border-radius: 10px;
+            color: var(--tx);
+            font-size: .84rem;
+            font-weight: 500;
+            outline: none;
+            transition: border .2s, box-shadow .2s;
+        }
+
+        .fi::placeholder {
+            color: var(--tx3);
+            font-weight: 400
+        }
+
+        .fi:focus {
+            border-color: var(--rb-blue);
+            box-shadow: 0 0 0 2px rgba(26, 140, 255, .12), 0 0 12px rgba(26, 140, 255, .06);
+        }
+
+        select.fi {
+            appearance: none;
+            cursor: pointer;
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%234f5260'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        textarea.fi {
+            resize: none;
+            min-height: 64px;
+            line-height: 1.5
+        }
+
+        .fg-row {
+            display: flex;
+            gap: 8px
+        }
+
+        .fg-row .fg {
+            flex: 1;
+            min-width: 0
+        }
+
+        .fg-sub {
+            font-size: .56rem;
+            color: var(--tx3);
+            margin-top: 3px;
+            text-align: right
+        }
+
+        /* PW */
+        .pw-w {
+            position: relative
+        }
+
+        .pw-w .fi {
+            padding-right: 36px
+        }
+
+        .pw-btn {
+            position: absolute;
+            right: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 3px;
+            color: var(--tx3);
+            display: flex;
+            transition: color .15s;
+        }
+
+        .pw-btn:hover {
+            color: var(--rb-yellow)
+        }
+
+        /* Toast */
+        .toast {
+            display: none;
+            margin-top: 10px;
+            padding: 9px 12px;
+            border-radius: 9px;
+            font-size: .72rem;
+            font-weight: 600;
+            text-align: center;
+            animation: pop .2s ease;
+        }
+
+        .toast-ok {
+            color: var(--rb-green);
+            background: rgba(0, 230, 77, .06);
+            border: 1px solid rgba(0, 230, 77, .15)
+        }
+
+        .toast-err {
+            color: var(--err);
+            background: var(--err-bg);
+            border: 1px solid rgba(239, 68, 68, .1)
+        }
+
+        @keyframes pop {
+            from {
+                opacity: 0;
+                transform: scale(.96)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        /* ── BUTTONS ── */
+        .act {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: .82rem;
+            font-weight: 700;
+            color: #0b0d10;
+            cursor: pointer;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowBtn 3s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, .12);
+            transition: transform .1s, box-shadow .15s, filter .15s;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes rainbowBtn {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        .act:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, .2), 0 0 30px rgba(102, 102, 255, .1);
+            filter: brightness(1.1);
+        }
+
+        .act:active {
+            transform: translateY(1px);
+            filter: brightness(0.95);
+        }
+
+        /* Ripple effect */
+        .act .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rippleAnim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .act svg {
+            width: 14px;
+            height: 14px;
+            stroke: #0b0d10;
+            fill: none
+        }
+
+        .act2 {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: 1px solid var(--ln);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--tx2);
+            font-family: inherit;
+            font-size: .72rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all .15s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .act2:hover {
+            border-color: var(--rb-violet);
+            color: var(--rb-violet);
+            box-shadow: 0 0 12px rgba(204, 51, 255, .1);
+        }
+
+        .act2 .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(204, 51, 255, 0.2);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        /* ── LOADER ── */
+        .lo {
+            text-align: center;
+            padding: 24px 0 8px
+        }
+
+        .lo-vis {
+            position: relative;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 16px
+        }
+
+        .lo-track {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid var(--ln);
+        }
+
+        .lo-arc {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--rb-red);
+            border-right-color: var(--rb-orange);
+            animation: spin 1s linear infinite;
+        }
+
+        .lo-arc:nth-child(3) {
+            inset: 10px;
+            border-width: 2.5px;
+            border-top-color: var(--rb-blue);
+            border-right-color: var(--rb-violet);
+            animation-duration: 1.5s;
+            animation-direction: reverse;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .lo-num {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: .92rem;
+            font-weight: 800;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowText 2s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: .5px;
+        }
+
+        .lo-bar {
+            width: 80%;
+            margin: 0 auto 8px;
+            height: 3px;
+            background: var(--s3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .lo-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 3px;
+            background: var(--rainbow);
+            background-size: 300% 100%;
+            animation: rainbowBorder 2s linear infinite;
+            transition: width .12s
+        }
+
+        .lo-msg {
+            font-size: .62rem;
+            color: var(--tx3)
+        }
+
+        /* ── CALC LOADER ── */
+        .clo {
+            text-align: center;
+            padding: 26px 0 8px
+        }
+
+        .clo-vis {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 14px
+        }
+
+        .clo-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2.5px solid var(--ln);
+            border-top-color: var(--rb-yellow);
+            border-right-color: var(--rb-green);
+            animation: spin 1s linear infinite;
+        }
+
+        .clo-ring:nth-child(2) {
+            inset: 8px;
+            border-top-color: var(--rb-indigo);
+            border-right-color: var(--rb-red);
+            animation-duration: 1.4s;
+            animation-direction: reverse
+        }
+
+        .clo-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--rb-yellow);
+            box-shadow: 0 0 8px rgba(255, 215, 0, .3), 0 0 16px rgba(255, 215, 0, .1);
+            animation: corePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes corePulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(255, 215, 0, .3)
+            }
+
+            50% {
+                box-shadow: 0 0 16px rgba(255, 215, 0, .5), 0 0 24px rgba(255, 140, 26, .2)
+            }
+        }
+
+        .clo-title {
+            font-size: .76rem;
+            font-weight: 600;
+            color: var(--tx2);
+            margin-bottom: 10px
+        }
+
+        .clo-bar {
+            width: 100%;
+            height: 2px;
+            background: var(--s3);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 7px
+        }
+
+        .clo-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 2px;
+            background: var(--rainbow);
+            background-size: 300% 100%;
+            animation: rainbowBorder 2s linear infinite;
+            transition: width .25s
+        }
+
+        .clo-step {
+            font-size: .58rem;
+            color: var(--tx3)
+        }
+
+        /* ── RESULTS ── */
+        .rIn {
+            animation: rSlide .3s ease
+        }
+
+        @keyframes rSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .r-tag {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: .56rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowText 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .r-tag svg {
+            width: 10px;
+            height: 10px
+        }
+
+        .r-dev {
+            text-align: center;
+            font-size: .7rem;
+            font-weight: 600;
+            color: var(--tx2);
+            margin-bottom: 16px
+        }
+
+        /* Gauge items */
+        .gauge {
+            margin-bottom: 10px
+        }
+
+        .gauge:last-child {
+            margin-bottom: 0
+        }
+
+        .gauge-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px
+        }
+
+        .gauge-name {
+            font-size: .72rem;
+            font-weight: 500;
+            color: var(--tx2)
+        }
+
+        .gauge-val {
+            font-size: .88rem;
+            font-weight: 800;
+            background: var(--rainbow);
+            background-size: 300% 300%;
+            animation: rainbowText 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gauge-bar {
+            width: 100%;
+            height: 5px;
+            background: var(--s3);
+            border-radius: 5px;
+            overflow: hidden
+        }
+
+        .gauge-fill {
+            height: 100%;
+            border-radius: 5px;
+            background: var(--rainbow);
+            background-size: 300% 100%;
+            animation: rainbowBorder 3s linear infinite;
+            transition: width .6s cubic-bezier(.22, 1, .36, 1)
+        }
+
+        /* Fire box */
+        .fire {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: rgba(255, 51, 51, .06);
+            border: 1px solid rgba(255, 51, 51, .12);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fire-name {
+            font-size: .74rem;
+            font-weight: 700;
+            color: var(--tx)
+        }
+
+        .fire-val {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--rb-orange)
+        }
+
+        .r-note {
+            text-align: center;
+            font-size: .58rem;
+            color: var(--tx3);
+            margin-top: 14px;
+            line-height: 1.6
+        }
+
+        /* ── FOOTER ── */
+        .ft {
+            padding: 10px 20px 13px;
+            text-align: center;
+            border-top: 1px solid var(--ln);
+            font-size: .52rem;
+            font-weight: 600;
+            color: var(--tx3);
+            letter-spacing: 1px;
+        }
+
+        .hide {
+            display: none !important
+        }
+
+        /* ── Button click flash ── */
+        @keyframes btnFlash {
+            0% {
+                filter: brightness(1.3);
+            }
+
+            100% {
+                filter: brightness(1);
+            }
+        }
+
+        .btn-flash {
+            animation: btnFlash 0.2s ease-out;
+        }
+
+        /* ── SVG rainbow stroke for header icon ── */
+        .hd-mark svg {
+            stroke: url(#rainbowGrad);
+        }
+
+        /* ── R-tag SVG ── */
+        .r-tag svg {
+            stroke: var(--rb-green);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- MATRIX RAIN CANVAS -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- SVG defs for rainbow gradient on SVG strokes -->
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <linearGradient id="rainbowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff3333" />
+                <stop offset="16%" stop-color="#ff8c1a" />
+                <stop offset="33%" stop-color="#ffd700" />
+                <stop offset="50%" stop-color="#00e64d" />
+                <stop offset="66%" stop-color="#1a8cff" />
+                <stop offset="83%" stop-color="#6666ff" />
+                <stop offset="100%" stop-color="#cc33ff" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="shell">
+        <div class="panel">
+
+            <!-- HEADER -->
+            <div class="hd">
+                <div class="hd-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="url(#rainbowGrad)" stroke-width="2"
+                        stroke-linecap="round">
+                        <circle cx="12" cy="12" r="8" opacity=".35" />
+                        <circle cx="12" cy="12" r="2" />
+                        <line x1="12" y1="2" x2="12" y2="7" />
+                        <line x1="12" y1="17" x2="12" y2="22" />
+                        <line x1="2" y1="12" x2="7" y2="12" />
+                        <line x1="17" y1="12" x2="22" y2="12" />
+                    </svg>
+                </div>
+                <div class="hd-info">
+                    <h1>App</h1>
+                    <p>Độ Nhạy Supper · Make By Benz</p>
+                </div>
+                <div class="hd-badge">Premium</div>
+            </div>
+
+            <div class="ct">
+
+                <!-- ═══ KEY ═══ -->
+                <div id="vKey">
+                    <div class="lbl">Xác thực truy cập</div>
+                    <div class="fg">
+                        <span class="fg-name">Key truy cập</span>
+                        <div class="pw-w">
+                            <input type="password" id="kI" class="fi" placeholder="Nhập key..." autocomplete="off">
+                            <button type="button" class="pw-btn" onclick="tglK()">
+                                <svg id="kEye" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="kMsg" class="toast"></div>
+                    <button class="act" onclick="chkK()">
+                        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                        </svg>
+                        Kiểm Tra Key
+                    </button>
+                    <a href="https://zalo.me/84386265304" target="_blank" rel="noopener" class="act2">Lấy Key VIP</a>
+                </div>
+
+                <!-- ═══ KEY LOAD ═══ -->
+                <div id="vKL" class="hide">
+                    <div class="lo">
+                        <div class="lo-vis">
+                            <div class="lo-track"></div>
+                            <div class="lo-arc"></div>
+                            <div class="lo-arc"></div>
+                            <div class="lo-num" id="loPct">0%</div>
+                        </div>
+                        <div class="lo-bar">
+                            <div class="lo-fill" id="loFill"></div>
+                        </div>
+                        <p class="lo-msg" id="loMsg">Đang xác thực key...</p>
+                    </div>
+                </div>
+
+                <!-- ═══ FORM ═══ -->
+                <div id="vForm" class="hide">
+                    <div class="lbl">Thiết lập thông số</div>
+                    <div class="fg">
+                        <span class="fg-name">Tên thiết bị</span>
+                        <input type="text" id="dI" class="fi" placeholder="iPhone 17 Pro Max, Oppo Reno 12..."
+                            autocomplete="off">
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg">
+                            <span class="fg-name">Hệ điều hành</span>
+                            <select id="oI" class="fi">
+                                <option value="" disabled selected>Chọn</option>
+                                <option value="iOS">iOS</option>
+                                <option value="Android">Android</option>
+                            </select>
+                        </div>
+                        <div class="fg">
+                            <span class="fg-name">Phong cách</span>
+                            <select id="pI" class="fi">
+                                <option value="" disabled selected>Chọn</option>
+                                <option value="rusher">Rusher</option>
+                                <option value="balanced">Cân bằng</option>
+                                <option value="sniper">Sniper</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="fg">
+                        <span class="fg-name">Tình trạng</span>
+                        <textarea id="iI" class="fi" placeholder="Rung tâm, lag, kéo lố đầu, vuốt nặng..."
+                            oninput="cCt()"></textarea>
+                        <div class="fg-sub"><span id="cc">0</span>/200</div>
+                    </div>
+                    <button class="act" onclick="go2()">
+                        Trích Xuất
+                        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- ═══ CALC LOAD ═══ -->
+                <div id="vCL" class="hide">
+                    <div class="clo">
+                        <div class="clo-vis">
+                            <div class="clo-ring"></div>
+                            <div class="clo-ring"></div>
+                            <div class="clo-core"></div>
+                        </div>
+                        <p class="clo-title">Đang phân tích...</p>
+                        <div class="clo-bar">
+                            <div class="clo-fill" id="cFill"></div>
+                        </div>
+                        <p class="clo-step" id="cStep">Khởi tạo...</p>
+                    </div>
+                </div>
+
+                <!-- ═══ RESULT ═══ -->
+                <div id="vRes" class="hide rIn">
+                    <div class="r-tag">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        ĐÃ TỐI ƯU
+                    </div>
+                    <p class="r-dev" id="rDev"></p>
+                    <div id="rGauges"></div>
+                    <div id="rFire"></div>
+                    <p class="r-note">Thông số được tối ưu riêng cho thiết bị của bạn<br>bởi thuật toán Supper — Make By
+                        Benz</p>
+                    <button class="act" onclick="back()">
+                        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="1 4 1 10 7 10" />
+                            <path d="M3.51 15a9 9 0 105.64-12.36L1 10" />
+                        </svg>
+                        Tính Toán Lại
+                    </button>
+                </div>
+
+            </div>
+            <div class="ft">© 2026 · MAKE BY BENZ</div>
+        </div>
+    </div>
+
+    <script>
+        /* ══════════════════════════════════════════
+           MATRIX RAIN BACKGROUND
+           ══════════════════════════════════════════ */
+        (function initMatrix() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            let w, h, columns, drops;
+
+            const chars = 'アカサタナハマヤラワBENZ01234567890ΘΩΞΨβδφ';
+            const rainbowColors = [
+                'rgba(255,51,51,', 'rgba(255,140,26,', 'rgba(255,215,0,',
+                'rgba(0,230,77,', 'rgba(26,140,255,', 'rgba(102,102,255,',
+                'rgba(204,51,255,'
+            ];
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                const fontSize = 14;
+                columns = Math.floor(w / fontSize);
+                drops = Array(columns).fill(1);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(11, 13, 16, 0.06)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.font = '14px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const char = chars[Math.floor(Math.random() * chars.length)];
+                    const colorBase = rainbowColors[i % rainbowColors.length];
+                    const alpha = 0.15 + Math.random() * 0.15;
+                    ctx.fillStyle = colorBase + alpha + ')';
+                    ctx.fillText(char, i * 14, drops[i] * 14);
+                    if (drops[i] * 14 > h && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        /* ══════════════════════════════════════════
+           SOUND ENGINE (Web Audio API)
+           ══════════════════════════════════════════ */
+        const SFX = (() => {
+            let ctx = null;
+            function getCtx() {
+                if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+                return ctx;
+            }
+            function playClick() {
+                try {
+                    const c = getCtx(), o = c.createOscillator(), g = c.createGain();
+                    o.connect(g); g.connect(c.destination);
+                    o.type = 'sine'; o.frequency.setValueAtTime(800, c.currentTime);
+                    o.frequency.exponentialRampToValueAtTime(400, c.currentTime + 0.08);
+                    g.gain.setValueAtTime(0.15, c.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+                    o.start(c.currentTime); o.stop(c.currentTime + 0.1);
+                } catch (e) { }
+            }
+            function playSuccess() {
+                try {
+                    const c = getCtx();
+                    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                    notes.forEach((freq, i) => {
+                        const o = c.createOscillator(), g = c.createGain();
+                        o.connect(g); g.connect(c.destination);
+                        o.type = 'sine';
+                        o.frequency.setValueAtTime(freq, c.currentTime + i * 0.1);
+                        g.gain.setValueAtTime(0.12, c.currentTime + i * 0.1);
+                        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i * 0.1 + 0.2);
+                        o.start(c.currentTime + i * 0.1);
+                        o.stop(c.currentTime + i * 0.1 + 0.2);
+                    });
+                } catch (e) { }
+            }
+            function playError() {
+                try {
+                    const c = getCtx(), o = c.createOscillator(), g = c.createGain();
+                    o.connect(g); g.connect(c.destination);
+                    o.type = 'square';
+                    o.frequency.setValueAtTime(200, c.currentTime);
+                    o.frequency.exponentialRampToValueAtTime(100, c.currentTime + 0.15);
+                    g.gain.setValueAtTime(0.1, c.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+                    o.start(c.currentTime); o.stop(c.currentTime + 0.15);
+                } catch (e) { }
+            }
+            function playHover() {
+                try {
+                    const c = getCtx(), o = c.createOscillator(), g = c.createGain();
+                    o.connect(g); g.connect(c.destination);
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(1200, c.currentTime);
+                    g.gain.setValueAtTime(0.04, c.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
+                    o.start(c.currentTime); o.stop(c.currentTime + 0.05);
+                } catch (e) { }
+            }
+            function playComplete() {
+                try {
+                    const c = getCtx();
+                    // Rainbow arpeggio: C D E F G A B
+                    const scale = [523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77];
+                    scale.forEach((freq, i) => {
+                        const o = c.createOscillator(), g = c.createGain();
+                        o.connect(g); g.connect(c.destination);
+                        o.type = 'sine';
+                        o.frequency.setValueAtTime(freq, c.currentTime + i * 0.06);
+                        g.gain.setValueAtTime(0.08, c.currentTime + i * 0.06);
+                        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i * 0.06 + 0.18);
+                        o.start(c.currentTime + i * 0.06);
+                        o.stop(c.currentTime + i * 0.06 + 0.18);
+                    });
+                } catch (e) { }
+            }
+            return { playClick, playSuccess, playError, playHover, playComplete };
+        })();
+
+        /* ══════════════════════════════════════════
+           RIPPLE EFFECT
+           ══════════════════════════════════════════ */
+        function createRipple(event, button) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            button.appendChild(ripple);
+            ripple.addEventListener('animationend', () => ripple.remove());
+        }
+
+        // Auto-attach ripple + sound to all buttons
+        document.addEventListener('click', e => {
+            const btn = e.target.closest('.act, .act2');
+            if (btn) {
+                createRipple(e, btn);
+                SFX.playClick();
+            }
+        });
+
+        // Hover sounds for buttons
+        document.addEventListener('mouseover', e => {
+            const btn = e.target.closest('.act, .act2');
+            if (btn && !btn._hovered) {
+                btn._hovered = true;
+                SFX.playHover();
+            }
+        });
+        document.addEventListener('mouseout', e => {
+            const btn = e.target.closest('.act, .act2');
+            if (btn) btn._hovered = false;
+        });
+
+        /* ══════════════════════════════════════════
+           APP LOGIC
+           ══════════════════════════════════════════ */
+        const $ = id => document.getElementById(id);
+        const V = ['vKey', 'vKL', 'vForm', 'vCL', 'vRes'];
+        function sw(id) { V.forEach(s => $(s).classList.toggle('hide', s !== id)) }
+
+        /* ── KEY ── */
+        function tglK() {
+            const i = $('kI'), e = $('kEye');
+            if (i.type === 'password') { i.type = 'text'; e.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'; }
+            else { i.type = 'password'; e.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'; }
+        }
+        function chkK() {
+            const k = $('kI').value.trim(), m = $('kMsg');
+            if (!k) { m.className = 'toast toast-err'; m.style.display = 'block'; m.textContent = 'Vui lòng nhập key.'; SFX.playError(); return }
+            if (k === 'Benz') {
+                m.className = 'toast toast-ok'; m.style.display = 'block'; m.textContent = 'Xác thực thành công!';
+                SFX.playSuccess();
+                setTimeout(() => { m.style.display = 'none'; runKL() }, 600);
+            } else {
+                m.className = 'toast toast-err'; m.style.display = 'block'; m.textContent = 'Thất bại — Key không hợp lệ, vui lòng nhập lại.';
+                SFX.playError();
+                $('kI').value = ''; $('kI').focus();
+            }
+        }
+
+        /* ── KEY LOADING ── */
+        function runKL() {
+            sw('vKL'); let p = 0;
+            const t = ['Đang xác thực key...', 'Kết nối server...', 'Tải cấu hình Supper...', 'Đồng bộ dữ liệu...', 'Hoàn tất!'];
+            const iv = setInterval(() => {
+                p += Math.floor(Math.random() * 4) + 2; if (p > 100) p = 100;
+                $('loFill').style.width = p + '%'; $('loPct').textContent = p + '%';
+                $('loMsg').textContent = t[Math.min(Math.floor(p / 100 * t.length), t.length - 1)];
+                if (p >= 100) { clearInterval(iv); SFX.playSuccess(); setTimeout(() => sw('vForm'), 350) }
+            }, 70);
+        }
+
+        /* ── FORM ── */
+        function cCt() { const t = $('iI'), c = t.value.length; $('cc').textContent = Math.min(c, 200); if (c > 200) t.value = t.value.slice(0, 200) }
+        function go2() {
+            const dn = $('dI').value.trim(), os = $('oI').value, ps = $('pI').value, ct = $('iI').value.trim();
+            if (!dn || !os || !ps || !ct) { alert('Vui lòng điền đầy đủ.'); SFX.playError(); return }
+            sw('vCL'); $('cFill').style.width = '0%';
+            const st = ['Khởi tạo...', 'Quét phần cứng...', 'Phân tích DPI...', 'Bù trừ cảm ứng...', 'Tối ưu hóa...'];
+            let i = 0; const n = st.length;
+            const iv = setInterval(() => {
+                if (i < n) { $('cStep').textContent = st[i]; $('cFill').style.width = ((i + 1) / n * 100) + '%'; i++ }
+                else { clearInterval(iv); SFX.playComplete(); setTimeout(() => { sw('vRes'); calc(dn, os, ps, ct.toLowerCase()) }, 200) }
+            }, 350);
+        }
+
+        /* ══════════════════════════════════════════
+           THUẬT TOÁN V7.0 — MAKE BY BENZ
+           Engine: FNV-1a Hash · Xorshift128 PRNG
+           Pipeline: Device → Playstyle → NLP → CrossCal
+           ══════════════════════════════════════════ */
+
+        // ── FNV-1a Hash (32-bit) ──
+        function fnv1a(s) {
+            let h = 0x811c9dc5;
+            for (let i = 0; i < s.length; i++) {
+                h ^= s.charCodeAt(i);
+                h = Math.imul(h, 0x01000193);
+            }
+            return h >>> 0;
+        }
+
+        // ── Xorshift128 PRNG ──
+        function Xorshift128(seed) {
+            let s = [seed >>> 0, (seed * 2654435761) >>> 0, (seed * 2246822519) >>> 0, (seed * 3266489917) >>> 0];
+            if (!s[0] && !s[1] && !s[2] && !s[3]) s[0] = 1;
+            return function () {
+                let t = s[3]; t ^= t << 11; t ^= t >>> 8;
+                s[3] = s[2]; s[2] = s[1]; s[1] = s[0];
+                t ^= s[0]; t ^= s[0] >>> 19; s[0] = t;
+                return (t >>> 0) / 4294967296;
+            };
+        }
+        function sR(r, a, b) { return Math.floor(r() * (b - a + 1)) + a }
+        function cl(v, a, b) { return Math.max(a, Math.min(b, Math.round(v))) }
+        function lerp(a, b, t) { return a + (b - a) * Math.max(0, Math.min(1, t)) }
+        function gaussian(r) { let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v) }
+
+        // ── DEVICE DATABASE (60+ profiles) ──
+        // [look, redDot, scope2x, scope4x, dpi, hz, touchLatency, panelType]
+        // panelType: 0=LCD, 1=OLED, 2=LTPO
+        const DEVICES = {
+            ios: [
+                { p: /ipad\s*pro\s*m[3-9]/i, b: [118, 105, 112, 110], dpi: 264, hz: 120, tl: 6, pt: 2, n: 'iPad Pro M-chip' },
+                { p: /ipad\s*pro/i, b: [122, 108, 116, 114], dpi: 264, hz: 120, tl: 7, pt: 2, n: 'iPad Pro' },
+                { p: /ipad\s*air/i, b: [128, 114, 122, 120], dpi: 264, hz: 60, tl: 9, pt: 1, n: 'iPad Air' },
+                { p: /ipad\s*mini/i, b: [132, 118, 126, 124], dpi: 326, hz: 60, tl: 9, pt: 1, n: 'iPad Mini' },
+                { p: /ipad/i, b: [135, 120, 128, 125], dpi: 264, hz: 60, tl: 10, pt: 0, n: 'iPad' },
+                { p: /16\s*pro\s*max/i, b: [142, 130, 140, 137], dpi: 460, hz: 120, tl: 5, pt: 2, n: 'iPhone 16 Pro Max' },
+                { p: /16\s*pro/i, b: [145, 132, 142, 139], dpi: 460, hz: 120, tl: 5, pt: 2, n: 'iPhone 16 Pro' },
+                { p: /16\s*plus/i, b: [150, 136, 146, 143], dpi: 460, hz: 60, tl: 7, pt: 1, n: 'iPhone 16 Plus' },
+                { p: /16/i, b: [152, 138, 148, 145], dpi: 460, hz: 60, tl: 7, pt: 1, n: 'iPhone 16' },
+                { p: /15\s*pro\s*max/i, b: [144, 132, 142, 138], dpi: 460, hz: 120, tl: 5, pt: 2, n: 'iPhone 15 Pro Max' },
+                { p: /15\s*pro/i, b: [147, 134, 144, 140], dpi: 460, hz: 120, tl: 5, pt: 2, n: 'iPhone 15 Pro' },
+                { p: /15\s*plus/i, b: [153, 139, 148, 145], dpi: 460, hz: 60, tl: 7, pt: 1, n: 'iPhone 15 Plus' },
+                { p: /15/i, b: [155, 140, 150, 147], dpi: 460, hz: 60, tl: 7, pt: 1, n: 'iPhone 15' },
+                { p: /14\s*pro\s*max/i, b: [148, 135, 145, 142], dpi: 460, hz: 120, tl: 5, pt: 2, n: 'iPhone 14 Pro Max' },
+                { p: /14\s*pro/i, b: [150, 137, 147, 144], dpi: 460, hz: 120, tl: 5, pt: 2, n: 'iPhone 14 Pro' },
+                { p: /14\s*plus/i, b: [158, 144, 152, 149], dpi: 458, hz: 60, tl: 8, pt: 1, n: 'iPhone 14 Plus' },
+                { p: /14/i, b: [160, 146, 154, 150], dpi: 460, hz: 60, tl: 8, pt: 1, n: 'iPhone 14' },
+                { p: /13\s*pro\s*max/i, b: [152, 138, 148, 144], dpi: 458, hz: 120, tl: 6, pt: 2, n: 'iPhone 13 Pro Max' },
+                { p: /13\s*pro/i, b: [155, 140, 150, 146], dpi: 460, hz: 120, tl: 6, pt: 2, n: 'iPhone 13 Pro' },
+                { p: /13\s*mini/i, b: [162, 148, 156, 153], dpi: 476, hz: 60, tl: 8, pt: 1, n: 'iPhone 13 Mini' },
+                { p: /13/i, b: [160, 145, 154, 150], dpi: 460, hz: 60, tl: 8, pt: 1, n: 'iPhone 13' },
+                { p: /12\s*pro\s*max/i, b: [156, 142, 150, 147], dpi: 458, hz: 60, tl: 7, pt: 1, n: 'iPhone 12 Pro Max' },
+                { p: /12\s*pro/i, b: [158, 144, 152, 149], dpi: 460, hz: 60, tl: 7, pt: 1, n: 'iPhone 12 Pro' },
+                { p: /12\s*mini/i, b: [168, 154, 162, 158], dpi: 476, hz: 60, tl: 9, pt: 1, n: 'iPhone 12 Mini' },
+                { p: /12/i, b: [164, 150, 158, 154], dpi: 460, hz: 60, tl: 8, pt: 1, n: 'iPhone 12' },
+                { p: /11\s*pro\s*max/i, b: [162, 148, 156, 152], dpi: 458, hz: 60, tl: 8, pt: 1, n: 'iPhone 11 Pro Max' },
+                { p: /11\s*pro/i, b: [164, 150, 158, 154], dpi: 458, hz: 60, tl: 8, pt: 1, n: 'iPhone 11 Pro' },
+                { p: /11/i, b: [172, 158, 166, 162], dpi: 326, hz: 60, tl: 10, pt: 0, n: 'iPhone 11' },
+                { p: /se\s*[3-9]/i, b: [170, 156, 164, 160], dpi: 326, hz: 60, tl: 10, pt: 0, n: 'iPhone SE 3+' },
+                { p: /se/i, b: [178, 164, 172, 168], dpi: 326, hz: 60, tl: 12, pt: 0, n: 'iPhone SE' },
+                { p: /x[sr]?\s*max/i, b: [170, 156, 164, 160], dpi: 458, hz: 60, tl: 9, pt: 1, n: 'iPhone XS Max' },
+                { p: /x[sr]?/i, b: [175, 160, 168, 164], dpi: 458, hz: 60, tl: 10, pt: 1, n: 'iPhone X/XR/XS' },
+                { p: /./, b: [182, 168, 176, 172], dpi: 326, hz: 60, tl: 11, pt: 0, n: 'iPhone (cũ)' },
+            ],
+            android: [
+                { p: /rog\s*phone\s*[8-9]/i, b: [130, 118, 128, 125], dpi: 395, hz: 165, tl: 4, pt: 1, n: 'ROG Phone 8/9' },
+                { p: /rog\s*phone\s*[6-7]/i, b: [135, 122, 132, 128], dpi: 395, hz: 165, tl: 5, pt: 1, n: 'ROG Phone 6/7' },
+                { p: /rog/i, b: [138, 126, 134, 130], dpi: 391, hz: 144, tl: 5, pt: 1, n: 'ROG Phone' },
+                { p: /redmagic\s*[9]/i, b: [132, 120, 130, 126], dpi: 450, hz: 165, tl: 4, pt: 1, n: 'RedMagic 9' },
+                { p: /redmagic/i, b: [136, 124, 132, 128], dpi: 395, hz: 144, tl: 5, pt: 1, n: 'RedMagic' },
+                { p: /black.?shark/i, b: [138, 126, 134, 130], dpi: 395, hz: 144, tl: 5, pt: 1, n: 'Black Shark' },
+                { p: /legion\s*(duel|phone|y)/i, b: [136, 124, 132, 128], dpi: 395, hz: 144, tl: 5, pt: 1, n: 'Lenovo Legion' },
+                { p: /s2[4-9]\s*ultra/i, b: [142, 130, 138, 135], dpi: 505, hz: 120, tl: 5, pt: 2, n: 'Galaxy S24-29 Ultra' },
+                { p: /s2[4-9]\s*\+|s2[4-9]\s*plus/i, b: [148, 135, 144, 140], dpi: 393, hz: 120, tl: 6, pt: 2, n: 'Galaxy S24+ Series' },
+                { p: /s2[4-9]/i, b: [152, 138, 148, 144], dpi: 416, hz: 120, tl: 6, pt: 2, n: 'Galaxy S24 Series' },
+                { p: /s2[1-3]\s*ultra/i, b: [148, 135, 144, 140], dpi: 515, hz: 120, tl: 6, pt: 2, n: 'Galaxy S21-23 Ultra' },
+                { p: /s2[1-3]\s*\+|s2[1-3]\s*plus/i, b: [155, 142, 150, 146], dpi: 394, hz: 120, tl: 7, pt: 2, n: 'Galaxy S21-23+' },
+                { p: /s2[0-3]/i, b: [158, 145, 153, 149], dpi: 421, hz: 120, tl: 7, pt: 2, n: 'Galaxy S20-23' },
+                { p: /fold\s*[5-9]/i, b: [150, 136, 146, 142], dpi: 374, hz: 120, tl: 6, pt: 2, n: 'Galaxy Z Fold 5+' },
+                { p: /fold/i, b: [155, 140, 150, 146], dpi: 374, hz: 120, tl: 7, pt: 2, n: 'Galaxy Z Fold' },
+                { p: /flip/i, b: [158, 144, 152, 148], dpi: 425, hz: 120, tl: 7, pt: 2, n: 'Galaxy Z Flip' },
+                { p: /samsung.*note/i, b: [160, 146, 154, 150], dpi: 496, hz: 120, tl: 7, pt: 1, n: 'Galaxy Note' },
+                { p: /samsung.*a[57][0-9]/i, b: [170, 155, 163, 160], dpi: 411, hz: 90, tl: 10, pt: 1, n: 'Galaxy A-series Mid' },
+                { p: /samsung.*a[123][0-9]/i, b: [178, 163, 170, 166], dpi: 411, hz: 60, tl: 12, pt: 0, n: 'Galaxy A-series Entry' },
+                { p: /samsung/i, b: [165, 150, 158, 155], dpi: 411, hz: 90, tl: 9, pt: 1, n: 'Samsung Galaxy' },
+                { p: /pixel\s*[8-9]\s*pro/i, b: [148, 135, 144, 140], dpi: 489, hz: 120, tl: 5, pt: 2, n: 'Pixel 8/9 Pro' },
+                { p: /pixel\s*[8-9]/i, b: [152, 138, 148, 144], dpi: 428, hz: 120, tl: 6, pt: 1, n: 'Pixel 8/9' },
+                { p: /pixel\s*[6-7]\s*pro/i, b: [152, 138, 148, 144], dpi: 512, hz: 120, tl: 6, pt: 2, n: 'Pixel 6/7 Pro' },
+                { p: /pixel/i, b: [158, 144, 152, 148], dpi: 411, hz: 90, tl: 7, pt: 1, n: 'Pixel' },
+                { p: /oneplus\s*1[2-9]/i, b: [146, 133, 142, 138], dpi: 450, hz: 120, tl: 5, pt: 2, n: 'OnePlus 12+' },
+                { p: /oneplus\s*(1[0-1]|ace|nord\s*ce)/i, b: [155, 142, 150, 146], dpi: 410, hz: 120, tl: 6, pt: 1, n: 'OnePlus 10-11/Ace' },
+                { p: /oneplus/i, b: [160, 146, 154, 150], dpi: 401, hz: 90, tl: 7, pt: 1, n: 'OnePlus' },
+                { p: /find\s*x[6-9]/i, b: [146, 133, 142, 138], dpi: 450, hz: 120, tl: 5, pt: 2, n: 'OPPO Find X6+' },
+                { p: /find\s*x/i, b: [150, 136, 145, 141], dpi: 525, hz: 120, tl: 6, pt: 2, n: 'OPPO Find X' },
+                { p: /oppo\s*reno\s*1[0-9]/i, b: [158, 144, 152, 148], dpi: 394, hz: 120, tl: 7, pt: 1, n: 'OPPO Reno 10+' },
+                { p: /oppo/i, b: [165, 150, 158, 155], dpi: 401, hz: 90, tl: 8, pt: 1, n: 'OPPO' },
+                { p: /xiaomi\s*1[4-9]\s*ultra/i, b: [142, 130, 138, 134], dpi: 521, hz: 120, tl: 5, pt: 2, n: 'Xiaomi 14+ Ultra' },
+                { p: /xiaomi\s*1[4-9]\s*pro/i, b: [146, 133, 142, 138], dpi: 521, hz: 120, tl: 5, pt: 2, n: 'Xiaomi 14+ Pro' },
+                { p: /xiaomi\s*1[4-9]/i, b: [150, 136, 145, 141], dpi: 460, hz: 120, tl: 6, pt: 2, n: 'Xiaomi 14+' },
+                { p: /xiaomi\s*1[2-3]\s*(ultra|pro)/i, b: [150, 136, 145, 141], dpi: 521, hz: 120, tl: 6, pt: 2, n: 'Xiaomi 12-13 Ultra/Pro' },
+                { p: /xiaomi\s*1[2-3]/i, b: [156, 142, 150, 146], dpi: 395, hz: 120, tl: 7, pt: 1, n: 'Xiaomi 12-13' },
+                { p: /xiaomi/i, b: [165, 150, 158, 155], dpi: 395, hz: 90, tl: 8, pt: 1, n: 'Xiaomi' },
+                { p: /poco\s*f[5-9]/i, b: [152, 138, 148, 144], dpi: 395, hz: 120, tl: 6, pt: 1, n: 'POCO F5+' },
+                { p: /poco\s*x/i, b: [162, 148, 156, 152], dpi: 395, hz: 120, tl: 7, pt: 1, n: 'POCO X' },
+                { p: /poco/i, b: [168, 154, 162, 158], dpi: 395, hz: 90, tl: 8, pt: 0, n: 'POCO' },
+                { p: /redmi\s*note\s*1[3-9]\s*pro/i, b: [158, 144, 152, 148], dpi: 395, hz: 120, tl: 7, pt: 1, n: 'Redmi Note 13+ Pro' },
+                { p: /redmi\s*note\s*1[2-9]/i, b: [165, 150, 158, 155], dpi: 395, hz: 120, tl: 8, pt: 1, n: 'Redmi Note 12+' },
+                { p: /redmi/i, b: [172, 158, 165, 162], dpi: 395, hz: 60, tl: 10, pt: 0, n: 'Redmi' },
+                { p: /realme\s*gt\s*(neo\s*)?[5-9]/i, b: [148, 135, 144, 140], dpi: 450, hz: 144, tl: 5, pt: 1, n: 'Realme GT 5+' },
+                { p: /realme\s*gt/i, b: [155, 142, 150, 146], dpi: 450, hz: 120, tl: 6, pt: 1, n: 'Realme GT' },
+                { p: /realme/i, b: [168, 154, 162, 158], dpi: 401, hz: 90, tl: 9, pt: 0, n: 'Realme' },
+                { p: /vivo\s*x\s*(100|200)/i, b: [148, 135, 144, 140], dpi: 452, hz: 120, tl: 5, pt: 2, n: 'Vivo X100/200' },
+                { p: /vivo\s*x/i, b: [155, 142, 150, 146], dpi: 397, hz: 120, tl: 6, pt: 1, n: 'Vivo X' },
+                { p: /iqoo\s*[9]|iqoo\s*neo/i, b: [148, 135, 144, 140], dpi: 450, hz: 144, tl: 5, pt: 1, n: 'iQOO' },
+                { p: /vivo/i, b: [166, 152, 160, 156], dpi: 401, hz: 90, tl: 9, pt: 1, n: 'Vivo' },
+                { p: /huawei\s*mate\s*(6|7)0\s*pro/i, b: [145, 132, 142, 138], dpi: 460, hz: 120, tl: 6, pt: 2, n: 'Huawei Mate Pro' },
+                { p: /huawei\s*p[67]0\s*pro/i, b: [148, 135, 144, 140], dpi: 460, hz: 120, tl: 6, pt: 2, n: 'Huawei P Pro' },
+                { p: /huawei/i, b: [162, 148, 156, 152], dpi: 422, hz: 90, tl: 8, pt: 1, n: 'Huawei' },
+                { p: /honor\s*(magic|[89]0)/i, b: [150, 136, 145, 141], dpi: 436, hz: 120, tl: 6, pt: 2, n: 'Honor Magic/90' },
+                { p: /honor/i, b: [162, 148, 156, 152], dpi: 396, hz: 90, tl: 8, pt: 1, n: 'Honor' },
+                { p: /nothing\s*phone/i, b: [158, 144, 152, 148], dpi: 422, hz: 120, tl: 7, pt: 1, n: 'Nothing Phone' },
+                { p: /infinix\s*gt/i, b: [162, 148, 156, 152], dpi: 395, hz: 120, tl: 8, pt: 1, n: 'Infinix GT' },
+                { p: /infinix|tecno/i, b: [175, 160, 168, 164], dpi: 395, hz: 60, tl: 12, pt: 0, n: 'Infinix/Tecno' },
+                { p: /./, b: [172, 158, 165, 162], dpi: 395, hz: 60, tl: 10, pt: 0, n: 'Android' },
+            ]
+        };
+
+        // ── NLP ENGINE V7 (weighted fuzzy matching) ──
+        const NLP_RULES = {
+            recoil: {
+                w: 1.0, kw: [
+                    { t: 'rung', w: 1.0 }, { t: 'giật', w: 1.2 }, { t: 'lệch', w: 0.9 }, { t: 'lung tung', w: 1.1 },
+                    { t: 'bay tâm', w: 1.3 }, { t: 'trôi', w: 0.8 }, { t: 'không ổn định', w: 1.0 }, { t: 'tâm nhảy', w: 1.1 },
+                    { t: 'nảy', w: 0.9 }, { t: 'tâm bay', w: 1.2 }, { t: 'loạn tâm', w: 1.3 }, { t: 'nòng súng', w: 0.7 },
+                    { t: 'tán đạn', w: 0.8 }, { t: 'đạn bay', w: 0.7 }, { t: 'tâm chữ thập', w: 0.6 },
+                    { t: 'crosshair', w: 0.6 }, { t: 'recoil', w: 1.0 }, { t: 'tung tâm', w: 1.1 }
+                ]
+            },
+            lag: {
+                w: 1.0, kw: [
+                    { t: 'nặng', w: 1.0 }, { t: 'lag', w: 1.2 }, { t: 'chậm', w: 0.9 }, { t: 'kẹt', w: 1.0 },
+                    { t: 'đơ', w: 1.1 }, { t: 'giảm fps', w: 1.3 }, { t: 'drop frame', w: 1.3 }, { t: 'frame drop', w: 1.3 },
+                    { t: 'giật hình', w: 1.1 }, { t: 'khựng', w: 1.0 }, { t: 'đứng hình', w: 1.2 }, { t: 'fps thấp', w: 1.2 },
+                    { t: 'tụt fps', w: 1.3 }, { t: 'render chậm', w: 0.8 }, { t: 'ping cao', w: 0.5 },
+                    { t: 'mạng yếu', w: 0.3 }, { t: 'delay', w: 0.8 }, { t: 'trì hoãn', w: 0.7 }, { t: 'chậm phản hồi', w: 0.9 }
+                ]
+            },
+            overshoot: {
+                w: 1.0, kw: [
+                    { t: 'hố', w: 1.0 }, { t: 'vượt', w: 1.0 }, { t: 'qua đầu', w: 1.1 }, { t: 'quá nhanh', w: 1.2 },
+                    { t: 'quá nhạy', w: 1.3 }, { t: 'kéo lố', w: 1.2 }, { t: 'trượt', w: 0.8 }, { t: 'lướt qua', w: 0.9 },
+                    { t: 'overshoot', w: 1.0 }, { t: 'quá tay', w: 1.0 }, { t: 'bay qua', w: 0.9 }, { t: 'nhạy quá', w: 1.3 },
+                    { t: 'kéo quá', w: 1.1 }, { t: 'vuốt lố', w: 1.1 }, { t: 'quá mức', w: 1.0 }, { t: 'lố tâm', w: 1.2 }
+                ]
+            },
+            close: {
+                w: 0.8, kw: [
+                    { t: 'full đỏ', w: 1.0 }, { t: 'cận', w: 1.0 }, { t: 'gần', w: 0.8 }, { t: 'mp40', w: 1.2 },
+                    { t: 'shotgun', w: 1.1 }, { t: 'mp5', w: 1.1 }, { t: 'thompson', w: 1.0 }, { t: 'ump', w: 1.0 },
+                    { t: 'smg', w: 1.0 }, { t: 'vector', w: 1.1 }, { t: 'mac10', w: 1.1 }, { t: 'cận chiến', w: 1.2 },
+                    { t: 'rush', w: 0.9 }, { t: 'm1014', w: 1.0 }, { t: 'm1887', w: 1.1 }, { t: 'đánh gần', w: 1.0 },
+                    { t: 'close range', w: 0.8 }, { t: 'm79', w: 0.7 }, { t: 'lựu đạn', w: 0.3 }
+                ]
+            },
+            far: {
+                w: 0.8, kw: [
+                    { t: 'xa', w: 0.8 }, { t: 'tầm trung', w: 0.9 }, { t: 'sniper', w: 1.2 }, { t: 'svd', w: 1.1 },
+                    { t: 'awm', w: 1.3 }, { t: 'kar98', w: 1.2 }, { t: 'bắn tỉa', w: 1.2 }, { t: 'm82b', w: 1.3 },
+                    { t: 'm14', w: 1.0 }, { t: 'sks', w: 1.0 }, { t: 'ak', w: 0.7 }, { t: 'm4', w: 0.6 },
+                    { t: 'ar', w: 0.6 }, { t: 'groza', w: 0.7 }, { t: 'woodpecker', w: 0.8 }, { t: 'ac80', w: 0.8 },
+                    { t: 'tầm xa', w: 1.1 }, { t: 'long range', w: 0.8 }, { t: 'scope', w: 0.5 }
+                ]
+            },
+            stiff: {
+                w: 0.9, kw: [
+                    { t: 'cứng', w: 1.0 }, { t: 'khó vuốt', w: 1.1 }, { t: 'không mượt', w: 1.0 }, { t: 'không trượt', w: 0.9 },
+                    { t: 'nặng tay', w: 1.1 }, { t: 'chậm phản hồi', w: 0.8 }, { t: 'ì', w: 0.7 }, { t: 'đờ', w: 0.8 },
+                    { t: 'stiff', w: 0.8 }, { t: 'khó kéo', w: 1.0 }, { t: 'khó điều khiển', w: 0.9 }, { t: 'cùi', w: 0.5 }
+                ]
+            }
+        };
+
+        function nlpAnalyze(text) {
+            const scores = {};
+            let totalHits = 0;
+            for (const [cat, rule] of Object.entries(NLP_RULES)) {
+                let s = 0, hits = 0;
+                for (const kw of rule.kw) {
+                    // exact substring match
+                    if (text.includes(kw.t)) { s += kw.w; hits++; continue; }
+                    // fuzzy: check if words share > 60% characters with input words
+                    const words = text.split(/[\s,;:.!?]+/);
+                    for (const w of words) {
+                        if (w.length < 2) continue;
+                        const common = [...new Set(kw.t)].filter(c => w.includes(c)).length;
+                        const sim = common / Math.max(kw.t.length, w.length);
+                        if (sim > 0.65 && w.length >= kw.t.length * 0.6) { s += kw.w * sim * 0.6; hits++; break; }
+                    }
+                }
+                scores[cat] = { score: s * rule.w, hits };
+                totalHits += hits;
+            }
+            return { scores, totalHits };
+        }
+
+        // ── MAIN CALCULATION ENGINE V7.0 ──
+        function calc(raw, os, ps, iss) {
+            const dn = raw.toLowerCase();
+            // Multi-seed for better distribution
+            const seed1 = fnv1a(dn + '|' + os + '|' + ps);
+            const seed2 = fnv1a(ps + '|' + dn + '|' + os);
+            const r = Xorshift128(seed1 ^ seed2);
+
+            // ── LAYER 1: Device Profile Matching ──
+            const db = os === 'iOS' ? DEVICES.ios : DEVICES.android;
+            let profile = db[db.length - 1]; // fallback
+            for (const d of db) { if (d.p.test(dn)) { profile = d; break; } }
+
+            let [s1, s2, s3, s4] = profile.b.slice();
+            const { dpi, hz, tl, pt } = profile;
+
+            // ── LAYER 2: Hardware Compensation ──
+            // Higher DPI → slightly lower sens needed
+            const dpiNorm = (dpi - 300) / 250; // 0..1 range
+            const dpiAdj = -dpiNorm * 6;
+            // Higher refresh rate → more responsive → can lower sens
+            const hzAdj = hz >= 144 ? -4 : hz >= 120 ? -2 : hz === 90 ? 2 : 5;
+            // Touch latency compensation
+            const tlAdj = (tl - 6) * 1.2;
+            // OLED/LTPO faster pixel response
+            const ptAdj = pt === 2 ? -2 : pt === 1 ? 0 : 3;
+
+            const hwTotal = dpiAdj + hzAdj + tlAdj + ptAdj;
+            s1 += Math.round(hwTotal * 1.0);
+            s2 += Math.round(hwTotal * 0.88);
+            s3 += Math.round(hwTotal * 0.75);
+            s4 += Math.round(hwTotal * 0.70);
+
+            // ── LAYER 3: Seeded Variation (Gaussian) ──
+            const gVar = () => cl(gaussian(r) * 3.5, -7, 7);
+            s1 += gVar(); s2 += gVar(); s3 += gVar(); s4 += gVar();
+
+            // ── LAYER 4: Playstyle Modifiers (refined) ──
+            const PLAYSTYLES = {
+                rusher: { look: -15, dot: -8, sc2: -5, sc4: -3, fire: 8, cam: 12, desc: 'Rusher' },
+                balanced: { look: 0, dot: 0, sc2: 0, sc4: 0, fire: 0, cam: 0, desc: 'Cân bằng' },
+                sniper: { look: 12, dot: 8, sc2: -6, sc4: -10, fire: -4, cam: -8, desc: 'Sniper' }
+            };
+            const pMod = PLAYSTYLES[ps] || PLAYSTYLES.balanced;
+            s1 += pMod.look; s2 += pMod.dot; s3 += pMod.sc2; s4 += pMod.sc4;
+            let fireMod = pMod.fire, camMod = pMod.cam;
+
+            // ── LAYER 5: NLP Issue Analysis ──
+            const nlp = nlpAnalyze(iss);
+            const { recoil, lag, overshoot, close, far, stiff } = nlp.scores;
+            let sensAdj = 0;
+
+            // Recoil issues → reduce sensitivity (less movement = less recoil feel)
+            if (recoil.score > 0) {
+                const amt = Math.min(recoil.score * 8, 28);
+                sensAdj -= amt;
+            }
+            // Lag/performance issues → increase sensitivity (compensate sluggishness)
+            if (lag.score > 0) {
+                const amt = Math.min(lag.score * 10, 30);
+                sensAdj += amt;
+            }
+            // Overshoot → reduce sensitivity
+            if (overshoot.score > 0) {
+                const amt = Math.min(overshoot.score * 7, 25);
+                sensAdj -= amt;
+                fireMod -= Math.round(amt * 0.3);
+            }
+            // Close range emphasis → boost fire & cam
+            if (close.score > 0) {
+                fireMod += Math.round(Math.min(close.score * 5, 12));
+                camMod += Math.round(Math.min(close.score * 6, 15));
+                sensAdj -= Math.round(close.score * 2); // slightly lower main sens for close
+            }
+            // Far range emphasis → optimize scopes
+            if (far.score > 0) {
+                s3 -= Math.round(Math.min(far.score * 4, 12));
+                s4 -= Math.round(Math.min(far.score * 5, 15));
+                fireMod -= Math.round(far.score * 2);
+            }
+            // Stiff/hard to swipe → increase sensitivity
+            if (stiff.score > 0) {
+                const amt = Math.min(stiff.score * 9, 22);
+                sensAdj += amt;
+            }
+
+            // Apply sens adjustment with decreasing ratio per scope
+            s1 += Math.round(sensAdj * 1.00);
+            s2 += Math.round(sensAdj * 0.82);
+            s3 += Math.round(sensAdj * 0.65);
+            s4 += Math.round(sensAdj * 0.55);
+
+            // ── LAYER 6: Cross-Scope Calibration ──
+            // Ensure logical relationships: look > redDot >= scope2x >= scope4x
+            if (s2 > s1) s2 = s1 - sR(r, 2, 6);
+            if (s3 > s2 + 3) s3 = s2 + sR(r, -2, 3);
+            if (s4 > s3 + 5) s4 = s3 + sR(r, -3, 5);
+            // Ensure minimum gaps
+            if (s1 - s2 < 3) s2 = s1 - sR(r, 3, 8);
+            if (s2 - s3 > 35) s3 = s2 - sR(r, 15, 25);
+            if (s3 - s4 > 20) s4 = s3 - sR(r, 5, 12);
+
+            // ── LAYER 7: Final Clamping ──
+            s1 = cl(s1, 80, 200); s2 = cl(s2, 70, 200);
+            s3 = cl(s3, 65, 200); s4 = cl(s4, 60, 200);
+
+            // Fire button & free camera
+            let fireBase = sR(r, 38, 50);
+            let camBase = sR(r, 48, 80);
+            // Adjust by screen size heuristic (tablets → smaller fire btn)
+            if (/ipad|tab|fold/i.test(dn)) { fireBase -= 8; camBase -= 5; }
+            let fire = cl(fireBase + fireMod, 25, 68);
+            let cam = cl(camBase + camMod, 20, 98);
+
+            // ── Confidence Score ──
+            let confidence = 60;
+            // Specific device match boosts confidence
+            if (profile !== db[db.length - 1]) confidence += 15;
+            // NLP hits boost confidence
+            confidence += Math.min(nlp.totalHits * 4, 16);
+            // Specific playstyle boosts
+            if (ps !== 'balanced') confidence += 5;
+            confidence = Math.min(confidence, 98);
+
+            // ── Build analysis description ──
+            let analysisLines = [];
+            analysisLines.push('📱 ' + profile.n + ' · ' + dpi + 'DPI · ' + hz + 'Hz');
+            if (recoil.score > 0) analysisLines.push('🎯 Giảm nhạy để ổn định tâm (-' + Math.round(recoil.score * 8) + ')');
+            if (lag.score > 0) analysisLines.push('⚡ Tăng nhạy bù hiệu suất (+' + Math.round(lag.score * 10) + ')');
+            if (overshoot.score > 0) analysisLines.push('🔽 Giảm nhạy chống kéo lố (-' + Math.round(overshoot.score * 7) + ')');
+            if (close.score > 0) analysisLines.push('🔥 Tối ưu cận chiến: fire +' + Math.round(close.score * 5));
+            if (far.score > 0) analysisLines.push('🔭 Tối ưu scope xa: 2x/4x giảm');
+            if (stiff.score > 0) analysisLines.push('💪 Tăng nhạy bù cảm ứng cứng (+' + Math.round(stiff.score * 9) + ')');
+
+            // ── RENDER RESULTS ──
+            $('rDev').innerHTML = raw.toUpperCase() + ' · ' + os +
+                '<br><span style="font-size:.58rem;color:var(--tx3)">' + analysisLines.join(' · ') + '</span>' +
+                '<br><span style="font-size:.54rem;color:var(--rb-yellow)">Độ tin cậy: ' + confidence + '%</span>';
+
+            const d = [
+                { n: 'Nhìn xung quanh', v: s1 },
+                { n: 'Red Dot', v: s2 },
+                { n: 'Ống nhắm 2x', v: s3 },
+                { n: 'Ống nhắm 4x', v: s4 },
+                { n: 'Camera tự do', v: cam }
+            ];
+
+            $('rGauges').innerHTML = d.map(x =>
+                `<div class="gauge">
+      <div class="gauge-top"><span class="gauge-name">${x.n}</span><span class="gauge-val">${x.v}</span></div>
+      <div class="gauge-bar"><div class="gauge-fill" style="width:0"></div></div>
+    </div>`
+            ).join('');
+
+            $('rFire').innerHTML = `<div class="fire"><span class="fire-name">Nút bắn (Size)</span><span class="fire-val">${fire}%</span></div>`;
+
+            // Animate gauges
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    document.querySelectorAll('.gauge-fill').forEach((el, i) => {
+                        el.style.width = (d[i].v / 200 * 100) + '%';
+                    });
+                }, 50);
+            });
+        }
+
+        function back() { sw('vForm'); $('iI').value = ''; $('cc').textContent = '0'; SFX.playClick(); }
+    </script>
+</body>
+
+</html>
